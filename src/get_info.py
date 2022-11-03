@@ -84,13 +84,13 @@ def get_data(state: str, pages: int = 1):
             return "Data not Available"
     df = pd.DataFrame(master_li).rename(rename_dict, axis=1)
     df.to_json(
-        f"../resources/downloads/json/data_{state.lower().strip().replace(' ', '_')}.json",
+        f"../downloads/json/data_{state.lower().strip().replace(' ', '_')}.json",
         orient="records",
         double_precision=5,
         indent=4,
     )
     df.to_csv(
-        f"../resources/downloads/csv/data_{state.lower().strip().replace(' ', '_')}.csv",
+        f"../downloads/csv/data_{state.lower().strip().replace(' ', '_')}.csv",
         float_format="%.5f",
         index=False,
     )
