@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
-
+import os
+from functools import cache
 
 URL = "https://loadqa.ndapapi.com/v1/openapi"
 
@@ -54,7 +55,7 @@ state_code_dict = {
 }
 
 params_dict = {
-    "API_Key": "76rFm9iW5iYKtPYiWDHJZi1BCWQhB2CL3hJ9u60FBWUWBF9RiBRUjPU2pH5oFozs7BHkqU01I0mKW4rtmYO",
+    "API_Key": os.getenv("API_KEY_NDPI"),
     "dim": "Country,StateName,StateCode,DistrictName,DistrictCode,Year,D6820_2,D6820_5",
     "ind": "I6820_6,I6820_7,I6820_8",
     "pageno": 1,
@@ -62,6 +63,7 @@ params_dict = {
 }
 
 
+@cache
 def get_data(state: str, pages: int = 1):
     if state not in state_code_dict:
         return "Invalid Input"
@@ -81,17 +83,17 @@ def get_data(state: str, pages: int = 1):
             # df = pd.DataFrame(resp["Data"]).rename(rename_dict, axis=1)
             master_li.extend(resp["Data"])
         except KeyError:
-            return "Data not Available"
+            return "Data Not Available"
     df = pd.DataFrame(master_li).rename(rename_dict, axis=1)
-    df.to_json(
-        f"../downloads/json/data_{state.lower().strip().replace(' ', '_')}.json",
-        orient="records",
-        double_precision=5,
-        indent=4,
-    )
-    df.to_csv(
-        f"../downloads/csv/data_{state.lower().strip().replace(' ', '_')}.csv",
-        float_format="%.5f",
-        index=False,
-    )
+    # df.to_json(
+    #     f"../downloads/json/data_{state.lower().strip().replace(' ', '_')}.json",
+    #     orient="records",
+    #     double_precision=5,
+    #     indent=4,
+    # )
+    # df.to_csv(
+    #     f"../downloads/csv/data_{state.lower().strip().replace(' ', '_')}.csv",
+    #     float_format="%.5f",
+    #     index=False,
+    # )
     return df.to_dict(orient="records")

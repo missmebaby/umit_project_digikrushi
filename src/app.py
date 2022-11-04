@@ -8,6 +8,9 @@ from flask import (
 )
 from get_info import get_data
 import os
+from types import NoneType
+from functools import cache
+
 
 STATE_NAME_LIST = [
     "Andaman and Nicobar Islands",
@@ -51,6 +54,8 @@ STATE_NAME_LIST = [
 app = Flask(__name__)
 
 app.config["UPLOAD_FOLDER"] = "../downloads"
+if not os.path.exists(app.config["UPLOAD_FOLDER"]):
+    os.makedirs(app.config["UPLOAD_FOLDER"])
 
 
 @app.route("/")
@@ -58,20 +63,56 @@ def home():
     return render_template("index.html")
 
 
+@cache
 @app.route("/data", methods=["GET", "POST"])
 def data():
+    pg = request.args.get("pg", type=int, default=1)
+    stte = request.args.get("state", type=str)
     if request.method == "POST":
+        global il, ste
         st = request.form.get("state", type=int)
+        if isinstance(st, NoneType):
+            return "Invalid Input"
         ste = STATE_NAME_LIST[st - 1]
         il = get_data(ste, 2)
         if isinstance(il, str):
-            return render_template("error_view.html", Error=il)
+            return f"{il}, {pg}, {st}, {ste}, {request.url}"
+        # print(il[25 * (pg - 1 ): 25 * (pg)])
         return render_template(
             "data_view.html",
-            info=il[:100:5],
+            info=il[25 * (pg - 1) : 25 * (pg)],
             total_records=len(il),
             state=ste,
-            n=len(il[:100:5]),
+            n=25,
+            prev="#",
+            nxt="?pg=2",
+            pg=1,
+        )
+    if stte is not None:
+        il2 = get_data(stte, 2)
+        if isinstance(il2, str):
+            return "Error"
+        # print(il[25 * (pg - 1 ): 25 * (pg)])
+        return render_template(
+            "data_view.html",
+            info=il2[25 * (pg - 1) : 25 * (pg)],
+            total_records=len(il2),
+            state=stte,
+            n=25,
+            prev="#",
+            nxt="?pg=2",
+            pg=1,
+        )
+    if pg > 1:
+        return render_template(
+            "data_view.html",
+            info=il[25 * (pg - 1) : 25 * (pg)],
+            total_records=len(il),
+            state=ste,
+            n=25,
+            prev=f"?pg={pg-1}" if pg > 2 else f"?pg=1&state={ste}",
+            nxt=f"?pg={pg+1}" if pg != 5 else f"?pg=1&state={ste}",
+            pg=pg,
         )
     return render_template(
         "data_view_home.html", n=len(STATE_NAME_LIST), sl=STATE_NAME_LIST
