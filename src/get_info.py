@@ -15,6 +15,7 @@ rename_dict = {
 }
 
 
+@cache
 def rename(li: list[dict]):
     nli = []
     for di in li:
@@ -102,13 +103,11 @@ def get_data(state: str, pages: int = 1):
     return master_li
 
 
-@cache
 def to_json(state: str):
     data = get_data(state, 2)
     return json.dumps(data, allow_nan=True, indent=4)
 
 
-@cache
 def to_csv(state: str):
     df = pd.DataFrame(get_data(state, 2))
     return df.to_csv(float_format="%.5f", index=False, encoding="UTF-8")
