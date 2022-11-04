@@ -15,7 +15,6 @@ rename_dict = {
 }
 
 
-@cache
 def rename(li: list[dict]):
     nli = []
     for di in li:

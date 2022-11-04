@@ -74,7 +74,11 @@ def data():
         global il, ste
         st = request.form.get("state", type=int)
         if isinstance(st, NoneType):
-            return "Invalid Input"
+            return render_template(
+                "data_view_home.html",
+                n=len(STATE_NAME_LIST),
+                sl=STATE_NAME_LIST,
+            )
         ste = STATE_NAME_LIST[st - 1]
         il = get_data(ste, 2)
         if isinstance(il, str):
@@ -87,7 +91,7 @@ def data():
             state=ste,
             n=len(dl),
             prev="#",
-            nxt="?pg=2" if len(dl) > 25 else "#",
+            nxt="?pg=2" if len(check(il, 25, 50)) > 0 else "#",
             pg=1,
         )
     if stte is not None:
@@ -102,7 +106,7 @@ def data():
             state=stte,
             n=len(dl),
             prev="#",
-            nxt="?pg=2" if len(dl) > 25 else "#",
+            nxt="?pg=2" if len(check(il, 25, 50)) > 0 else "#",
             pg=1,
         )
     if pg > 1:
@@ -114,7 +118,9 @@ def data():
             state=ste,
             n=len(dl),
             prev=f"?pg={pg-1}" if pg > 2 else f"?pg=1&state={ste}",
-            nxt=f"?pg={pg+1}" if pg != 5 and len(dl) > 0 else f"?pg=1&state={ste}",
+            nxt=f"?pg={pg+1}"
+            if pg < 5 and len(check(il, 25 * (pg - 1), 25 * pg)) > 0
+            else f"?pg=1&state={ste}",
             pg=pg,
         )
     return render_template(
@@ -140,7 +146,3 @@ def download(state: str, filename: str) -> Response:
         ] = f"attachement; filename=data_{state.lower().replace(' ', '_')}.csv"
         resp.mimetype = "text/csv"
         return resp
-
-
-if __name__ == "__main__":
-    app.run("0.0.0.0", debug=True)
