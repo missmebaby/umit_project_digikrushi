@@ -44,23 +44,26 @@
         </table>
     </div>
     <div class="container">
-        <nav aria-label="...">
-            <ul class="pagination pagination-sm justify-content-end">
-                <li class="page-item">
-                    <a class="page-link" href="/data{{prev}}">previous</a>
-                </li>
-                <li class="page-item disabled"><a class="page-link" href="#">{{pg}}</a></li>
-                <li class="page-item"><a class="page-link" href="/data{{nxt}}">next</a></li>
-            </ul>
-        </nav>
+        <div class="row">
+            <div class="col">
+                <p class="text-dark">Click to download <a href="/download/{{state}}/json" class="link-primary">json</a>
+                    or
+                    <a href="/download/{{state}}/csv" class="link-primary">csv</a>
+                </p>
+            </div>
+            <div class="col">
+                <nav aria-label="..." class="col">
+                    <ul class="pagination pagination-sm justify-content-end">
+                        <li class="page-item">
+                            <a class="page-link" href="/data{{prev}}">previous</a>
+                        </li>
+                        <li class="page-item disabled"><a class="page-link" href="#">{{pg}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/data{{nxt}}">next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
-
-    <!-- <div class="container">
-        <p class="text-dark">Click to download <a href="/data/download/{{state}}/json" class="link-primary">json</a> or
-            <a href="/data/download/{{state}}/csv" class="link-primary">csv</a>
-        </p>
-    </div> -->
-
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"

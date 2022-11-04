@@ -1,12 +1,11 @@
 from flask import (
     Flask,
     render_template,
-    send_file,
     request,
     Response,
-    send_from_directory,
+    make_response,
 )
-from get_info import get_data
+from get_info import get_data, to_json, to_csv
 import os
 from types import NoneType
 from functools import cache
@@ -119,27 +118,24 @@ def data():
     )
 
 
-@app.route("/data/download/<string:state>/<string:filetype>")
-def download(state: str, filetype: str) -> Response:
-    dirc = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"])
-    if filetype == "json":
-        f1 = send_from_directory(
-            dirc,
-            path=f"./json/data_{state}.json",
-            mimetype="application/json",
-            download_name=f"data_{state}.json",
-            as_attachment=True,
-        )
-        return f1
-
-    elif filetype == "csv":
-        file_csv = send_file(
-            f"../downloads/csv/data_{state}.csv",
-            mimetype="text/csv",
-            download_name=f"data_{state}.csv",
-            as_attachment=True,
-        )
-        return file_csv
+@app.route("/download/<string:state>/<string:filename>")
+def download(state: str, filename: str) -> Response:
+    if filename == "json":
+        f1 = to_json(state)
+        resp = make_response(f1)
+        resp.headers[
+            "Content-Disposition"
+        ] = f"attachement; filename=data_{state.lower().replace(' ', '_')}.json"
+        resp.mimetype = "application/json"
+        return resp
+    elif filename == "csv":
+        f1 = to_csv(state)
+        resp = make_response(f1)
+        resp.headers[
+            "Content-Disposition"
+        ] = f"attachement; filename=data_{state.lower().replace(' ', '_')}.csv"
+        resp.mimetype = "text/csv"
+        return resp
 
 
 if __name__ == "__main__":

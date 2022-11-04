@@ -1,7 +1,8 @@
+import json
 import requests
-import pandas as pd
 import os
 from functools import cache
+import pandas as pd
 
 URL = "https://loadqa.ndapapi.com/v1/openapi"
 
@@ -12,6 +13,19 @@ rename_dict = {
     "I6820_7": "Crop production (t (Tonne))",
     "I6820_8": "Crop yield (t/ha (Tonnes per Hectares))",
 }
+
+
+def rename(li: list[dict]):
+    nli = []
+    for di in li:
+        ndi = {}
+        for k, v in di.items():
+            if k in rename_dict:
+                ndi[rename_dict[k]] = v.strip() if type(v) is str else v
+            else:
+                ndi[k] = v.strip() if type(v) is str else v
+        nli.append(ndi)
+    return nli
 
 
 state_code_dict = {
@@ -79,21 +93,22 @@ def get_data(state: str, pages: int = 1):
         if not resp.ok:
             return "Invalid URL"
         try:
-            resp = resp.json()
-            # df = pd.DataFrame(resp["Data"]).rename(rename_dict, axis=1)
-            master_li.extend(resp["Data"])
+            resp = resp.json()["Data"]
         except KeyError:
             return "Data Not Available"
-    df = pd.DataFrame(master_li).rename(rename_dict, axis=1)
-    # df.to_json(
-    #     f"../downloads/json/data_{state.lower().strip().replace(' ', '_')}.json",
-    #     orient="records",
-    #     double_precision=5,
-    #     indent=4,
-    # )
-    # df.to_csv(
-    #     f"../downloads/csv/data_{state.lower().strip().replace(' ', '_')}.csv",
-    #     float_format="%.5f",
-    #     index=False,
-    # )
-    return df.to_dict(orient="records")
+        else:
+            master_li.extend(rename(resp))
+
+    return master_li
+
+
+@cache
+def to_json(state: str):
+    data = get_data(state, 2)
+    return json.dumps(data, allow_nan=True, indent=4)
+
+
+@cache
+def to_csv(state: str):
+    df = pd.DataFrame(get_data(state, 2))
+    return df.to_csv(float_format="%.5f", index=False, encoding="UTF-8")
