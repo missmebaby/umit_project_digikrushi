@@ -6,7 +6,6 @@ from flask import (
     make_response,
 )
 from get_info import get_data, to_json, to_csv
-import os
 from types import NoneType
 from functools import cache
 
@@ -52,9 +51,13 @@ STATE_NAME_LIST = [
 
 app = Flask(__name__)
 
-app.config["UPLOAD_FOLDER"] = "../downloads"
-if not os.path.exists(app.config["UPLOAD_FOLDER"]):
-    os.makedirs(app.config["UPLOAD_FOLDER"])
+
+def check(li: list, i: int = 0, j: int = 25):
+    try:
+        dl = li[i:j]
+    except IndexError:
+        dl = li[i : len(li)]
+    return dl
 
 
 @app.route("/")
@@ -75,42 +78,43 @@ def data():
         ste = STATE_NAME_LIST[st - 1]
         il = get_data(ste, 2)
         if isinstance(il, str):
-            return f"{il}, {pg}, {st}, {ste}, {request.url}"
-        # print(il[25 * (pg - 1 ): 25 * (pg)])
+            return il
+        dl = check(il)
         return render_template(
             "data_view.html",
-            info=il[25 * (pg - 1) : 25 * (pg)],
+            info=dl,
             total_records=len(il),
             state=ste,
-            n=25,
+            n=len(dl),
             prev="#",
-            nxt="?pg=2",
+            nxt="?pg=2" if len(dl) > 25 else "#",
             pg=1,
         )
     if stte is not None:
         il2 = get_data(stte, 2)
         if isinstance(il2, str):
             return "Error"
-        # print(il[25 * (pg - 1 ): 25 * (pg)])
+        dl = check(il2)
         return render_template(
             "data_view.html",
-            info=il2[25 * (pg - 1) : 25 * (pg)],
+            info=dl,
             total_records=len(il2),
             state=stte,
-            n=25,
+            n=len(dl),
             prev="#",
-            nxt="?pg=2",
+            nxt="?pg=2" if len(dl) > 25 else "#",
             pg=1,
         )
     if pg > 1:
+        dl = check(il, 25 * (pg - 1), 25 * pg)
         return render_template(
             "data_view.html",
-            info=il[25 * (pg - 1) : 25 * (pg)],
+            info=dl,
             total_records=len(il),
             state=ste,
-            n=25,
+            n=len(dl),
             prev=f"?pg={pg-1}" if pg > 2 else f"?pg=1&state={ste}",
-            nxt=f"?pg={pg+1}" if pg != 5 else f"?pg=1&state={ste}",
+            nxt=f"?pg={pg+1}" if pg != 5 and len(dl) > 0 else f"?pg=1&state={ste}",
             pg=pg,
         )
     return render_template(
