@@ -3,8 +3,12 @@ import requests
 import os
 from functools import cache
 import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path="/etc/secrets/.env")
 
 URL = "https://loadqa.ndapapi.com/v1/openapi"
+
 
 rename_dict = {
     "D6820_2": "Crop",
@@ -13,20 +17,6 @@ rename_dict = {
     "I6820_7": "Crop production (t (Tonne))",
     "I6820_8": "Crop yield (t/ha (Tonnes per Hectares))",
 }
-
-
-def rename(li: list[dict]):
-    nli = []
-    for di in li:
-        ndi = {}
-        for k, v in di.items():
-            if k in rename_dict:
-                ndi[rename_dict[k]] = v.strip() if type(v) is str else v
-            else:
-                ndi[k] = v.strip() if type(v) is str else v
-        nli.append(ndi)
-    return nli
-
 
 state_code_dict = {
     "Andaman and Nicobar Islands": {"AlphaCode": "AN", "Code": "35"},
@@ -75,6 +65,29 @@ params_dict = {
     "pageno": 1,
     "StateCode": "{'StateCode': 1}",
 }
+
+
+def parse_values(di: dict):
+    ndi = {}
+    for k, v in di.items():
+        if k in rename_dict:
+            if type(v) is dict:
+                ndi[rename_dict[k]] = f"{float(v['avg']):.2f}"
+            else:
+                ndi[rename_dict[k]] = v.strip() if type(v) is str else v
+        elif k == "Year":
+            ndi[k] = di[k].split(", ")[-1].strip()
+        else:
+            ndi[k] = v.strip() if type(v) is str else v
+    return ndi
+
+
+def rename(li: list[dict]):
+    nli = []
+    for di in li:
+        ndi = parse_values(di)
+        nli.append(ndi)
+    return nli
 
 
 @cache
