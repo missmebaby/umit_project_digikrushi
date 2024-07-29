@@ -61,8 +61,8 @@ state_code_dict = {
 params_dict = {
    # "API_Key": os.getenv("API_KEY_NDPI"),
     #new api key :- https://loadqa.ndapapi.com/v1/openapi?API_Key=gAAAAABmpzMG970z7OIyTVrRWceIsOPlvPsTmjNWswPOS59oUnymSw16HnBYQtyho6rg8uXilN_Oai4uRoTftYyZx65bJ1olQHfFp2iZLYs5mWHR-_wEMIoYcyUyZofrbzOFkdQSyWkMNgoKqch2RiyZ9lJDTuEwe4fdVpjP0FtKEKLrx9t0hoBJwMK4ihGP7YnJs-nFvlWD&ind=I6797_8&dim=Country,StateName,StateCode,DistrictName,DistrictCode,Year,D6797_3,D6797_4,D6797_5,D6797_6,D6797_7&pageno=1
-    #"API_Key": "gAAAAABmppUwTRBndLdAmFoBPkOSOgxWSUWCMfsdhai6V7rkM3QLnxeyu6Ar2k3coNvPzNCNrRuevtXV6RB0I8TxZu4pyVi6SIP6uzqEGP9tHcldP49ceM2q8nmofktxitZeEkBozWRuWxa7De9ytBk1EDsLtWguliTCEZLUXyD7MOmx5jKPT5Xj5M8p9tqDBdbBgBOPzNvr",
-    "API_Key":"gAAAAABmpzMG970z7OIyTVrRWceIsOPlvPsTmjNWswPOS59oUnymSw16HnBYQtyho6rg8uXilN_Oai4uRoTftYyZx65bJ1olQHfFp2iZLYs5mWHR-_wEMIoYcyUyZofrbzOFkdQSyWkMNgoKqch2RiyZ9lJDTuEwe4fdVpjP0FtKEKLrx9t0hoBJwMK4ihGP7YnJs-nFvlWD&ind=I6797_",
+    "API_Key": "gAAAAABmppUwTRBndLdAmFoBPkOSOgxWSUWCMfsdhai6V7rkM3QLnxeyu6Ar2k3coNvPzNCNrRuevtXV6RB0I8TxZu4pyVi6SIP6uzqEGP9tHcldP49ceM2q8nmofktxitZeEkBozWRuWxa7De9ytBk1EDsLtWguliTCEZLUXyD7MOmx5jKPT5Xj5M8p9tqDBdbBgBOPzNvr",
+   #bad "API_Key":"gAAAAABmpzMG970z7OIyTVrRWceIsOPlvPsTmjNWswPOS59oUnymSw16HnBYQtyho6rg8uXilN_Oai4uRoTftYyZx65bJ1olQHfFp2iZLYs5mWHR-_wEMIoYcyUyZofrbzOFkdQSyWkMNgoKqch2RiyZ9lJDTuEwe4fdVpjP0FtKEKLrx9t0hoBJwMK4ihGP7YnJs-nFvlWD&ind=I6797_",
     "dim": "Country,StateName,StateCode,DistrictName,DistrictCode,Year,D6820_2,D6820_5",
     "ind": "I6820_6,I6820_7,I6820_8",
     "pageno": 1,
