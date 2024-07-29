@@ -57,7 +57,7 @@ state_code_dict = {
     "Uttarakhand": {"AlphaCode": "UT", "Code": "5"},
     "West Bengal": {"AlphaCode": "WB", "Code": "19"},
 }
-
+#{'StateCode': 1},{'StateCode': 2},{'StateCode': 3},{'StateCode': 4},{'StateCode': 5},{'StateCode': 6},{'StateCode': 7},{'StateCode': 8},{'StateCode': 9},{'StateCode': 10},{'StateCode': 11},{'StateCode': 12},{'StateCode': 13},{'StateCode': 14},{'StateCode': 15},{'StateCode': 16},{'StateCode': 17},{'StateCode': 18},{'StateCode': 19},{'StateCode': 20},{'StateCode': 21},{'StateCode': 22},{'StateCode': 23},{'StateCode': 24},{'StateCode': 27},{'StateCode': 28},{'StateCode': 29},{'StateCode': 30},{'StateCode': 32},{'StateCode': 33},{'StateCode': 34},{'StateCode': 35},{'StateCode': 36},{'StateCode': 37},{'StateCode': 38}&ind=I6820_6,I6820_7,I6820_8&dim=Country,StateName,StateCode,DistrictName,DistrictCode,Year,D6820_2,D6820_5&pageno=1
 params_dict = {
    # "API_Key": os.getenv("API_KEY_NDPI"),
     "API_Key": "gAAAAABmppUwTRBndLdAmFoBPkOSOgxWSUWCMfsdhai6V7rkM3QLnxeyu6Ar2k3coNvPzNCNrRuevtXV6RB0I8TxZu4pyVi6SIP6uzqEGP9tHcldP49ceM2q8nmofktxitZeEkBozWRuWxa7De9ytBk1EDsLtWguliTCEZLUXyD7MOmx5jKPT5Xj5M8p9tqDBdbBgBOPzNvr",
